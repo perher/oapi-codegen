@@ -1,8 +1,9 @@
 // Handler creates http.Handler with routing matching OpenAPI spec.
-func Handler(si ServerInterface) http.Handler {
-  return HandlerWithOptions(si, StdHTTPServerOptions{})
+func {{ opts.OutputOptions.TypePrefix }}Handler(si {{ opts.OutputOptions.TypePrefix }}ServerInterface) http.Handler {
+  return {{ opts.OutputOptions.TypePrefix }}HandlerWithOptions(si, StdHTTPServerOptions{})
 }
 
+{{ if not opts.OutputOptions.TypePrefix }}
 // ServeMux is an abstraction of http.ServeMux.
 type ServeMux interface {
 	HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request))
@@ -15,23 +16,24 @@ type StdHTTPServerOptions struct {
     Middlewares      []MiddlewareFunc
     ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
 }
+{{- end }}{{/* if not opts.OutputOptions.TypePrefix */}}
 
 // HandlerFromMux creates http.Handler with routing matching OpenAPI spec based on the provided mux.
-func HandlerFromMux(si ServerInterface, m ServeMux) http.Handler {
-    return HandlerWithOptions(si, StdHTTPServerOptions {
+func {{ opts.OutputOptions.TypePrefix }}HandlerFromMux(si {{ opts.OutputOptions.TypePrefix }}ServerInterface, m ServeMux) http.Handler {
+    return {{ opts.OutputOptions.TypePrefix }}HandlerWithOptions(si, StdHTTPServerOptions {
         BaseRouter: m,
     })
 }
 
-func HandlerFromMuxWithBaseURL(si ServerInterface, m ServeMux, baseURL string) http.Handler {
-    return HandlerWithOptions(si, StdHTTPServerOptions {
+func {{ opts.OutputOptions.TypePrefix }}HandlerFromMuxWithBaseURL(si {{ opts.OutputOptions.TypePrefix }}ServerInterface, m ServeMux, baseURL string) http.Handler {
+    return {{ opts.OutputOptions.TypePrefix }}HandlerWithOptions(si, StdHTTPServerOptions {
         BaseURL: baseURL,
         BaseRouter: m,
     })
 }
 
 // HandlerWithOptions creates http.Handler with additional options
-func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.Handler {
+func {{ opts.OutputOptions.TypePrefix }}HandlerWithOptions(si {{ opts.OutputOptions.TypePrefix }}ServerInterface, options StdHTTPServerOptions) http.Handler {
 	m := options.BaseRouter
 
 	if m == nil {
@@ -43,7 +45,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		}
 	}
 {{if .}}
-	wrapper := ServerInterfaceWrapper{
+	wrapper := {{ opts.OutputOptions.TypePrefix }}ServerInterfaceWrapper{
 		Handler: si,
 		HandlerMiddlewares: options.Middlewares,
 		ErrorHandlerFunc: options.ErrorHandlerFunc,

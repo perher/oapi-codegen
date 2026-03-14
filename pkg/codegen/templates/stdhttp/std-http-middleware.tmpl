@@ -1,16 +1,18 @@
 // ServerInterfaceWrapper converts contexts to parameters.
-type ServerInterfaceWrapper struct {
-    Handler ServerInterface
+type {{ opts.OutputOptions.TypePrefix }}ServerInterfaceWrapper struct {
+    Handler {{ opts.OutputOptions.TypePrefix }}ServerInterface
     HandlerMiddlewares []MiddlewareFunc
     ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request, err error)
 }
 
+{{ if not opts.OutputOptions.TypePrefix }}
 type MiddlewareFunc func(http.Handler) http.Handler
+{{- end }}{{/* if not opts.OutputOptions.TypePrefix */}}
 
 {{range .}}{{$opid := .OperationId}}
 
 // {{$opid}} operation middleware
-func (siw *ServerInterfaceWrapper) {{$opid}}(w http.ResponseWriter, r *http.Request) {
+func (siw *{{ opts.OutputOptions.TypePrefix }}ServerInterfaceWrapper) {{$opid}}(w http.ResponseWriter, r *http.Request) {
   {{if or .RequiresParamObject (gt (len .PathParams) 0) }}
   var err error
   {{end}}
@@ -196,6 +198,7 @@ func (siw *ServerInterfaceWrapper) {{$opid}}(w http.ResponseWriter, r *http.Requ
 }
 {{end}}
 
+{{ if not opts.OutputOptions.TypePrefix }}
 type UnescapedCookieParamError struct {
     ParamName string
     Err error
@@ -264,3 +267,4 @@ type TooManyValuesForParamError struct {
 func (e *TooManyValuesForParamError) Error() string {
     return fmt.Sprintf("Expected one value for %s, got %d", e.ParamName, e.Count)
 }
+{{- end }}{{/* if not opts.OutputOptions.TypePrefix */}}

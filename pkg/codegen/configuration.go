@@ -261,6 +261,8 @@ type OutputOptions struct {
 	ExcludeSchemas []string `yaml:"exclude-schemas,omitempty"`
 	// The suffix used for responses types
 	ResponseTypeSuffix string `yaml:"response-type-suffix,omitempty"`
+	// Prefix to use for all structs and interfaces
+	TypePrefix string `yaml:"type-prefix"`
 	// Override the default generated client type with the value
 	ClientTypeName string `yaml:"client-type-name,omitempty"`
 	// Whether to use the initialism overrides

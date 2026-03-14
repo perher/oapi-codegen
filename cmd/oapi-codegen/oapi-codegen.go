@@ -57,6 +57,7 @@ var (
 	flagImportMapping       string
 	flagExcludeSchemas      string
 	flagResponseTypeSuffix  string
+	flagTypePrefix          string
 	flagAliasTypes          bool
 	flagInitialismOverrides bool
 )
@@ -111,6 +112,7 @@ func main() {
 	flag.StringVar(&flagImportMapping, "import-mapping", "", "A dict from the external reference to golang package path.")
 	flag.StringVar(&flagExcludeSchemas, "exclude-schemas", "", "A comma separated list of schemas which must be excluded from generation.")
 	flag.StringVar(&flagResponseTypeSuffix, "response-type-suffix", "", "The suffix used for responses types.")
+	flag.StringVar(&flagTypePrefix, "type-prefix", "", "The prefix used for all types.")
 	flag.BoolVar(&flagAliasTypes, "alias-types", false, "Alias type declarations if possible.")
 	flag.BoolVar(&flagInitialismOverrides, "initialism-overrides", false, "Use initialism overrides.")
 
@@ -450,6 +452,9 @@ func updateConfigFromFlags(cfg *configuration) error {
 	}
 	if flagResponseTypeSuffix != "" {
 		cfg.OutputOptions.ResponseTypeSuffix = flagResponseTypeSuffix
+	}
+	if flagTypePrefix != "" {
+		cfg.OutputOptions.TypePrefix = flagTypePrefix
 	}
 	if flagAliasTypes {
 		return fmt.Errorf("--alias-types isn't supported any more")
