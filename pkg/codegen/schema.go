@@ -493,7 +493,7 @@ func GenerateGoSchema(sref *openapi3.SchemaRef, path []string) (Schema, error) {
 				}
 			}
 
-			outSchema.GoType = GenStructFromSchema(outSchema)
+			outSchema.GoType = GenStructFromSchema(outSchema, schema.Extensions)
 		}
 
 		// Check for x-go-type-name. It behaves much like x-go-type, however, it will
@@ -808,16 +808,34 @@ func additionalPropertiesType(schema Schema) string {
 	return addPropsType
 }
 
-func GenStructFromSchema(schema Schema) string {
+func GenStructFromSchema(schema Schema, extensions map[string]any) string {
 	// Start out with struct {
 	objectParts := []string{"struct {"}
 	// Append all the field definitions
 	objectParts = append(objectParts, GenFieldsFromProperties(schema.Properties)...)
 	// Close the struct
 	if schema.HasAdditionalProperties {
+		fieldTags := make(map[string]string)
+		fieldTags["json"] = "-"
+		// Support x-oapi-codegen-extra-tags
+		if extension, ok := extensions[extAdditionalPropTags]; ok {
+			if tags, err := extExtraTags(extension); err == nil {
+				keys := SortedMapKeys(tags)
+				for _, k := range keys {
+					fieldTags[k] = tags[k]
+				}
+			}
+		}
+		// Convert the fieldTags map into Go field annotations.
+		keys := SortedMapKeys(fieldTags)
+		tags := make([]string, len(keys))
+		for i, k := range keys {
+			tags[i] = fmt.Sprintf(`%s:"%s"`, k, fieldTags[k])
+		}
+
 		objectParts = append(objectParts,
-			fmt.Sprintf("AdditionalProperties map[string]%s `json:\"-\"`",
-				additionalPropertiesType(schema)))
+			fmt.Sprintf("AdditionalProperties map[string]%s `%s`",
+				additionalPropertiesType(schema), strings.Join(tags, " ")))
 	}
 	if len(schema.UnionElements) != 0 {
 		objectParts = append(objectParts, "union json.RawMessage")

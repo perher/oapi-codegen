@@ -15,15 +15,16 @@ const (
 	// extGoName is used to override a field name
 	extGoName = "x-go-name"
 	// extGoTypeName is used to override a generated typename for something.
-	extGoTypeName        = "x-go-type-name"
-	extPropGoJsonIgnore  = "x-go-json-ignore"
-	extPropOmitEmpty     = "x-omitempty"
-	extPropOmitZero      = "x-omitzero"
-	extPropExtraTags     = "x-oapi-codegen-extra-tags"
-	extEnumVarNames      = "x-enum-varnames"
-	extEnumNames         = "x-enumNames"
-	extDeprecationReason = "x-deprecated-reason"
-	extOrder             = "x-order"
+	extGoTypeName         = "x-go-type-name"
+	extPropGoJsonIgnore   = "x-go-json-ignore"
+	extPropOmitEmpty      = "x-omitempty"
+	extPropOmitZero       = "x-omitzero"
+	extPropExtraTags      = "x-oapi-codegen-extra-tags"
+	extAdditionalPropTags = "x-oapi-codegen-additional-prop-tags"
+	extEnumVarNames       = "x-enum-varnames"
+	extEnumNames          = "x-enumNames"
+	extDeprecationReason  = "x-deprecated-reason"
+	extOrder              = "x-order"
 	// extOapiCodegenOnlyHonourGoName is to be used to explicitly enforce the generation of a field as the `x-go-name` extension has describe it.
 	// This is intended to be used alongside the `allow-unexported-struct-field-names` Compatibility option
 	extOapiCodegenOnlyHonourGoName = "x-oapi-codegen-only-honour-go-name"

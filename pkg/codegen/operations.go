@@ -795,7 +795,7 @@ func GenerateBodyDefinitions(operationID string, bodyOrRef *openapi3.RequestBody
 				}
 
 				// Regenerate the Golang struct adding the new form tag.
-				bodySchema.GoType = GenStructFromSchema(bodySchema)
+				bodySchema.GoType = GenStructFromSchema(bodySchema, content.Schema.Extensions)
 			}
 
 			td := TypeDefinition{
@@ -991,7 +991,7 @@ func GenerateParamsTypes(op OperationDefinition) []TypeDefinition {
 	}
 
 	s.Description = op.Spec.Description
-	s.GoType = GenStructFromSchema(s)
+	s.GoType = GenStructFromSchema(s, op.Spec.Extensions)
 
 	td := TypeDefinition{
 		TypeName: typeName,
