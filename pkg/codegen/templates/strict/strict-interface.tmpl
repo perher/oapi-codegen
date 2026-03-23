@@ -136,7 +136,7 @@
 {{end}}
 
 // StrictServerInterface represents all server handlers.
-type StrictServerInterface interface {
+type {{ opts.OutputOptions.TypePrefix }}StrictServerInterface interface {
 {{range .}}{{.SummaryAsComment }}
 // ({{.Method}} {{.Path}})
 {{$opid := .OperationId -}}
