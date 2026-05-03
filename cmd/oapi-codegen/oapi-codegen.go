@@ -88,7 +88,7 @@ type oldConfiguration struct {
 
 // noVCSVersionOverride allows overriding the version of the application for cases where no Version Control System (VCS) is available when building, for instance when using a Nix derivation.
 // See documentation for how to use it in examples/no-vcs-version-override/README.md
-var noVCSVersionOverride string
+var noVCSVersionOverride = "v2.6.0"
 
 func main() {
 	flag.StringVar(&flagOutputFile, "o", "", "Where to output generated code, stdout is default.")
